@@ -1,0 +1,19 @@
+Install:
+```
+mix deps.get
+```
+
+Start database:
+```
+...
+```
+
+Create schema:
+```
+mix ecto.create
+```
+
+Run:
+```mix phx.server```
+or
+```iex -S mix phx.server```
