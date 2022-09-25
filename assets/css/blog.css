@@ -1,0 +1,77 @@
+@import "./normalize.css";
+
+
+html {
+    background-color: #121415;
+    color: white;
+    font-family: "Courier New";
+    font-size: var(--font-size-base);
+}
+
+:root {
+    --max-width-base: 60vw;
+    --max-width-shrunk: 80vw;
+    --font-size-base: 28px
+}
+
+section.content {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    max-width: var(--max-width-base);
+    margin: auto;
+    flex-direction: column;
+}
+
+@media(max-width: 1400px) {
+    section.content {
+        max-width: var(--max-width-shrunk);
+    }
+}
+
+header.common {
+   margin-bottom: 30px;
+}
+
+header.common>.title {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+header.common>.title>h2 {
+    font-size: 32px;
+}
+
+
+header.common>.title>h2>a {
+    color: white;
+}
+
+header.common>.title>h2>a:hover {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+section.ref_text {
+    font-size: calc(var(--font-size-base) - 2px);
+    border: 2px solid rgb(255, 255, 255, 0.6);
+    
+    border-radius: 45px 20px;
+    padding: 40px 50px;
+}
+
+section.ref_text>.text {
+    margin-bottom: 20px;
+}
+
+section.ref_text>.ref {
+    font-style: italic;
+    display: flex;
+    justify-content: end;
+}
+
+section.content > section {
+    margin-bottom: 50px;
+}

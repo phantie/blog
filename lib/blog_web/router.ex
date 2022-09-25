@@ -5,7 +5,7 @@ defmodule BlogWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {BlogWeb.LayoutView, :root}
+    plug :put_root_layout, {BlogWeb.LayoutView, :clean} # here
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -18,6 +18,8 @@ defmodule BlogWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    get "/post/", PageController, :post
   end
 
   # Other scopes may use custom stacks.
