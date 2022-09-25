@@ -7,7 +7,9 @@ defmodule BlogWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_blog_key",
-    signing_salt: "Wkd0lDzU"
+    signing_salt: "Wkd0lDzU",
+    # TODO fix SameSite errors in Chrome
+    same_site: "None",
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]

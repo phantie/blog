@@ -60,7 +60,9 @@ config :blog, BlogWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/blog_web/(live|views)/.*(ex)$",
-      ~r"lib/blog_web/templates/.*(eex)$"
+      ~r"lib/blog_web/templates/.*(eex)$",
+      # code for blogs stored close to .heex blog
+      ~r"lib/blog_web/templates/.*$" 
     ]
   ]
 

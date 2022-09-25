@@ -19,4 +19,27 @@ defmodule BlogWeb.PageView do
     </section>
     """
   end
+
+  def code(assigns) do
+    # TODO finish support of possibly undetected languages
+    # assigns = case assigns[:lang] do
+    #   nil -> Map.put(assigns, :lang, "") # autodetect
+    #   lang -> Map.put(assigns, :lang, "class=\"#{lang}\"")
+    # end
+
+    assigns =
+      if assigns[:file] do
+        nil = assigns[:code]
+        {:ok, code} = File.read(assigns[:file])
+        Map.put(assigns, :code, code)
+      else
+        assigns
+      end
+
+    ~H"""
+    <section class="code">
+    <pre><code><%= @code %></code></pre>
+    </section>
+    """
+  end
 end
