@@ -31,6 +31,7 @@ defmodule BlogWeb do
     quote do
       use Phoenix.View,
         root: "lib/blog_web/templates",
+        pattern: "**/*",
         namespace: BlogWeb
 
       # Import convenience functions from controllers
