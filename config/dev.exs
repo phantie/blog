@@ -62,7 +62,7 @@ config :blog, BlogWeb.Endpoint,
       ~r"lib/blog_web/(live|views)/.*(ex)$",
       ~r"lib/blog_web/templates/.*(eex)$",
       # code for blogs stored close to .heex blog
-      ~r"lib/blog_web/templates/.*$" 
+      ~r"lib/blog_web/templates/.*$"
     ]
   ]
 

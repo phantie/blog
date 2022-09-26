@@ -3,13 +3,14 @@
 
 
 html {
-    background-color: #121415;
+    background-color: var(--background-color);
     color: white;
     font-family: "Courier New";
     font-size: var(--font-size-base);
 }
 
 :root {
+    --background-color: #121415;
     --max-width-base: 60vw;
     --max-width-shrunk: 80vw;
     --font-size-base: 28px
@@ -31,7 +32,7 @@ section.content {
 }
 
 header.common {
-   margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 header.common>.title {
@@ -58,7 +59,7 @@ header.common>.title>h2>a:hover {
 section.ref_text {
     font-size: calc(var(--font-size-base) - 2px);
     border: 2px solid rgba(42, 45, 47, 0.9);
-    
+
     border-radius: 45px 20px;
     padding: 40px 50px;
 }
@@ -73,15 +74,37 @@ section.ref_text>.ref {
     justify-content: end;
 }
 
-section.content > section {
+section.content>section {
     margin-bottom: 50px;
 }
 
-section.code > pre > code {
+section.code>pre>code {
     font-size: calc(var(--font-size-base) - 4px);
     border-radius: 10px;
 }
 
-section.code > pre {
+section.code>pre {
     margin: 0;
+}
+
+section.title {
+    font-weight: bolder;
+    font-size: calc(var(--font-size-base) + 5px);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(to right, rgb(90, 90, 90), var(--background-color)) 1;
+}
+
+section.yt_video {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+}
+
+section.yt_video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
