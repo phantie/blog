@@ -21,24 +21,30 @@ defmodule BlogWeb.PageView do
   end
 
   def code(assigns) do
-    # TODO finish support of possibly undetected languages
-    # assigns = case assigns[:lang] do
-    #   nil -> Map.put(assigns, :lang, "") # autodetect
-    #   lang -> Map.put(assigns, :lang, "class=\"#{lang}\"")
-    # end
+    assigns = assigns
+      |> Map.put(
+        :lang,
+        case assigns[:lang] do
+          # autodetect
+          nil -> ""
+          lang -> "language-#{lang}"
+        end
+      )
 
     assigns =
       if assigns[:file] do
         nil = assigns[:code]
         {:ok, code} = File.read(assigns[:file])
-        Map.put(assigns, :code, code)
+        assigns
+        |> Map.delete(:file)
+        |> Map.put(:code, code)
       else
         assigns
       end
 
     ~H"""
     <section class="code">
-      <pre><code><%= @code %></code></pre>
+      <pre><code class={@lang}><%= @code %></code></pre>
     </section>
     """
   end
@@ -55,12 +61,14 @@ defmodule BlogWeb.PageView do
     assigns =
       if assigns[:id] do
         nil = assigns[:url]
-        Map.put(assigns, :url, "https://youtube.com/embed/#{assigns.id}")
+        assigns
+        |> Map.delete(:id)
+        |> Map.put(:url, "https://youtube.com/embed/#{assigns.id}")
       else
         assigns
       end
 
-    assigns = Map.put(assigns, :url, assigns.url <> "?modestbranding=1")
+    assigns = assigns |> Map.put(:url, assigns.url <> "?modestbranding=1")
 
     ~H"""
     <section class="yt_video">
