@@ -21,7 +21,8 @@ defmodule BlogWeb.PageView do
   end
 
   def code(assigns) do
-    assigns = assigns
+    assigns =
+      assigns
       |> Map.put(
         :lang,
         case assigns[:lang] do
@@ -35,6 +36,7 @@ defmodule BlogWeb.PageView do
       if assigns[:file] do
         nil = assigns[:code]
         {:ok, code} = File.read(assigns[:file])
+
         assigns
         |> Map.delete(:file)
         |> Map.put(:code, code)
@@ -57,18 +59,22 @@ defmodule BlogWeb.PageView do
     """
   end
 
+  defp add_query(url, query_params) do
+    (url <> "?") <>
+      (query_params
+       |> Enum.map(fn {k, v} -> "#{k}=#{v}" end)
+       |> Enum.join("&"))
+  end
+
   def yt(assigns) do
     assigns =
-      if assigns[:id] do
-        nil = assigns[:url]
-        assigns
-        |> Map.delete(:id)
-        |> Map.put(:url, "https://youtube.com/embed/#{assigns.id}")
-      else
-        assigns
-      end
+      assigns
+      |> Map.delete(:id)
+      |> Map.put(:url, "https://youtube.com/embed/#{assigns.id}")
 
-    assigns = assigns |> Map.put(:url, assigns.url <> "?modestbranding=1")
+    query = [modestbranding: 1]
+
+    assigns = assigns |> Map.put(:url, add_query(assigns.url, query))
 
     ~H"""
     <section class="yt_video">
