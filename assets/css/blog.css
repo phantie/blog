@@ -108,3 +108,11 @@ section.yt_video iframe {
     height: 100%;
     border: none;
 }
+
+section.img > img {
+  width: 100%;
+}
+
+footer {
+  margin-top: 180px;
+}

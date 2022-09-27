@@ -78,10 +78,19 @@ defmodule BlogWeb.PageView do
 
     ~H"""
     <section class="yt_video">
-      <iframe src={@url}>
+      <iframe src={@url} allowfullscreen>
       </iframe>
     </section>
     """
+  end
+
+  # TODO add support for local images stored closely to post files
+  def img(assigns) do
+    ~H"""
+    <section class="img">
+      <img src={@url}>
+    </section>
+    """ 
   end
 
   def post_preview(assigns) do
