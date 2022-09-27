@@ -40,19 +40,30 @@ defmodule Post.Manifest.Parsed do
   end
 
   def new(title: title, tags: tags, description: description) do
-    true = is_binary(title)
-    true = is_nil(description) || is_binary(description)
+    invalid_field = fn field_name ->
+      {:error, field_name}
+    end
 
-    true =
-      is_list(tags) &&
-        Enum.count(tags) >= 1 &&
-        Enum.all?(tags, fn tag -> is_binary(tag) end)
+    cond do
+      !is_binary(title) ->
+        invalid_field.(:title)
 
-    %Post.Manifest.Parsed{
-      title: title,
-      tags: tags,
-      description: description
-    }
+      !(is_nil(description) || is_binary(description)) ->
+        invalid_field.(:description)
+
+      !(is_list(tags) &&
+          Enum.count(tags) >= 1 &&
+            Enum.all?(tags, fn tag -> is_binary(tag) end)) ->
+        invalid_field.(:tags)
+
+      true ->
+        {:ok,
+         %Post.Manifest.Parsed{
+           title: title,
+           tags: tags,
+           description: description
+         }}
+    end
   end
 end
 
@@ -89,7 +100,12 @@ defmodule Blog.Posts do
         %Post.Manifest{
           path: path,
           content: manifest,
-          parsed: parse_manifest(manifest)
+          parsed:
+            case parse_manifest(manifest) do
+              {:ok, manifest} -> manifest
+              {:error, field} ->
+                raise "manifest has invalid field '#{field}'. path: #{path}"
+            end
         }
 
       {:error, :enoent} ->
