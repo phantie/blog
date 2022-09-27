@@ -6,15 +6,21 @@ defmodule BlogWeb.PageView do
   def text(assigns) do
     ~H"""
     <section>
-      <div class="text"><%= @text %></div>
+      <div class="text"><%= render_slot(@inner_block) %></div>
     </section>
+    """
+  end
+
+  def link(assigns) do
+    ~H"""
+      <a class="link" href={@href}><%= render_slot(@inner_block) %></a>ᴴ
     """
   end
 
   def ref_text(assigns) do
     ~H"""
     <section class="ref_text">
-      <div class="text"><%= @text %></div>
+      <div class="text"><%= render_slot(@inner_block) %></div>
       <div class="ref"><%= @ref %></div>
     </section>
     """

@@ -128,6 +128,10 @@ defmodule Blog.Posts do
     false
   end
 
+  def ready_post?(%{has_content: false}) do
+    false
+  end
+
   def ready_post?(%{manifest: %{parsed: _}, has_content: true}) do
     true
   end
