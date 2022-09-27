@@ -14,6 +14,8 @@ defmodule Blog.Application do
       BlogWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Blog.PubSub},
+      # Start posts collection
+      Blog.Posts,
       # Start the Endpoint (http/https)
       BlogWeb.Endpoint
       # Start a worker by calling: Blog.Worker.start_link(arg)

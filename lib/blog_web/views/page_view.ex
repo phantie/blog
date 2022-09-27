@@ -83,4 +83,39 @@ defmodule BlogWeb.PageView do
     </section>
     """
   end
+
+  def post_preview(assigns) do
+    ~H"""
+    <section class="post_preview">
+      <h3><%= @title %></h3>
+      <p><%= @desc %></p>
+      <small><i><%= @tags %></i></small>
+    </section>
+    """
+  end
+
+  def post_previews(assigns) do
+    valid_posts = Blog.Posts.value() |> Blog.Posts.valid_posts()
+
+    posts =
+      valid_posts
+      |> Enum.sort_by(fn post -> post.dt end, {:desc, NaiveDateTime})
+      |> Enum.map(fn post ->
+        Map.take(post.manifest.parsed, [:title, :description, :tags])
+        |> Map.put(:dt, post.dt)
+      end)
+
+    assigns = Map.put(assigns, :posts, posts)
+
+    ~H"""
+      <%= for post <- @posts do %>
+        <section class="post_preview">
+          <h3><%= post.title %></h3>
+          <p><%= post.description %></p>
+          <p><i><%= Enum.join(post.tags, ", ") %></i></p>
+          <p><i><%= Date.to_string(NaiveDateTime.to_date(post.dt)) %></i></p>
+        </section>
+      <% end %>
+    """
+  end
 end

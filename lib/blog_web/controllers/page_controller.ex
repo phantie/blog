@@ -14,4 +14,9 @@ defmodule BlogWeb.PageController do
     # |> put_flash(:error, "Let's pretend we have an error.")
     |> render("posts/26_9_22/post.html", page_title: "Post")
   end
+
+  def posts(conn, _params) do
+    conn
+    |> render("posts.html", page_title: "Posts")
+  end
 end
