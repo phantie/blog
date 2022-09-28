@@ -25,12 +25,6 @@ section.content {
   flex-direction: column;
 }
 
-@media(max-width: 1400px) {
-  section.content {
-    max-width: var(--max-width-shrunk);
-  }
-}
-
 header.common {
   margin-bottom: 30px;
 }
@@ -57,21 +51,28 @@ header.common .title h2 a:hover {
 }
 
 section.ref_text {
-  font-size: calc(var(--font-size-base) - 2px);
-  border: 2px solid rgba(42, 45, 47, 0.9);
-
-  border-radius: 45px 20px;
-  padding: 40px 50px;
+  padding: 30px 40px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 section.ref_text .text {
-  margin-bottom: 20px;
+  overflow-wrap: break-word;
+  display: inline;
+}
+
+section.ref_text .quote{
+  display: inline;
 }
 
 section.ref_text .ref {
+  margin-top: 20px;
   font-style: italic;
   display: flex;
   justify-content: end;
+}
+
+section.text {
+  overflow-wrap: break-word;
 }
 
 section.content section {
@@ -92,6 +93,7 @@ section.title {
   font-size: calc(var(--font-size-base) + 5px);
   border-bottom: 3px solid;
   border-image: linear-gradient(to right, rgb(90, 90, 90), var(--background-color)) 1;
+  overflow-wrap: break-word;
 }
 
 section.yt_video {
@@ -120,9 +122,18 @@ footer {
 
 section a.link {
   color: white;
-  /* text-decoration: rgba(255, 255, 255, 0.3) underline; */
 }
 
 section a.link:hover {
   text-decoration: rgba(255, 255, 255, 0.5) underline;
+}
+
+@media(max-width: 1400px) {
+  section.content {
+    max-width: var(--max-width-shrunk);
+  }
+
+  section.ref_text {
+    padding: 40px 10px;
+  }
 }
