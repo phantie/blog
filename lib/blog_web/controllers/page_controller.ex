@@ -13,9 +13,24 @@ defmodule BlogWeb.PageController do
     |> render("posts/26_9_22/post.html", page_title: "Post")
   end
 
-  def posts(conn, _params) do
+  def posts(conn, params) do
+    desired_page =
+      case params["page"] do
+        nil ->
+          1
+
+        page ->
+          case Integer.parse(page) do
+            {int, ""} when int > 0 -> int
+            _ -> 1
+          end
+      end
+
     conn
-    |> render("posts.html", page_title: "Posts")
+    |> render("posts.html",
+      page_title: "Posts",
+      page: desired_page
+    )
   end
 
   def post(conn, %{"id" => id}) do
