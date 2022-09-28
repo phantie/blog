@@ -19,7 +19,9 @@ defmodule BlogWeb.Router do
 
     get "/", PageController, :index
 
-    get "/post/", PageController, :post
+    get "/post/first/", PageController, :first_post
+
+    get "/post/:id/", PageController, :post
 
     get "/posts/", PageController, :posts
   end

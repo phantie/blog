@@ -1,6 +1,8 @@
 defmodule Post do
   defstruct [
-    :path,
+    :id,
+    :path_from_root,
+    :path_for_render,
     :dt,
     :has_content,
     :manifest
@@ -71,8 +73,10 @@ defmodule Blog.Posts do
   use Agent
 
   @manifest_file "manifest.yaml"
-  @content_file "post.html.heex"
-  @path "lib/blog_web/templates/page/posts"
+  @content_html "post.html"
+  @content_file @content_html <> ".heex"
+  @posts_path_for_render "posts/"
+  @posts_path_from_root Path.join("lib/blog_web/templates/page/", @posts_path_for_render)
 
   def start_link([]) do
     IO.puts("post agent has started")
@@ -119,21 +123,24 @@ defmodule Blog.Posts do
   end
 
   def load_posts do
-    {:ok, posts} = File.ls(@path)
+    {:ok, posts} = File.ls(@posts_path_from_root)
 
     IO.puts("Potential posts: " <> inspect(posts))
 
     posts
     |> Enum.map(fn fld_name ->
-      path = Path.join(@path, fld_name)
-      content_file_path = Path.join(path, @content_file)
+      path_from_root = Path.join(@posts_path_from_root, fld_name)
+      path_for_render = Path.join([@posts_path_for_render, fld_name, @content_html])
+      content_file_path = Path.join(path_from_root, @content_file)
       has_content = File.exists?(content_file_path)
 
       %Post{
+        id: fld_name,
         dt: Post.parse_datetime(fld_name),
-        path: path,
+        path_from_root: path_from_root,
+        path_for_render: path_for_render,
         has_content: has_content,
-        manifest: load_manifest(path)
+        manifest: load_manifest(path_from_root)
       }
     end)
   end
@@ -160,6 +167,13 @@ defmodule Blog.Posts do
     else
       load_posts()
     end
+  end
+
+  # TODO optimize using mapping on necessity
+  def post_by_id(id) do
+    value()
+    |> valid_posts()
+    |> Enum.find(nil, fn post -> post.id == id end)
   end
 
   # TODO find a way to reload state of this agent when

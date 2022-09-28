@@ -13,7 +13,7 @@ defmodule BlogWeb.PageView do
 
   def link(assigns) do
     ~H"""
-      <a class="link" href={@href}><%= render_slot(@inner_block) %></a>ᴴ
+      <a class="link" href={@href}><%= render_slot(@inner_block) %></a><div class="href_sign">ᴴ</div>
     """
   end
 
@@ -127,6 +127,7 @@ defmodule BlogWeb.PageView do
             {:ok, fmt} -> fmt
           end
         )
+        |> Map.put(:id, post.id)
       end)
 
     assigns = Map.put(assigns, :posts, posts)
@@ -134,7 +135,9 @@ defmodule BlogWeb.PageView do
     ~H"""
       <%= for post <- @posts do %>
         <section class="post_preview">
-          <div class="title"><%= post.title %></div>
+          <div class="title">
+            <.link href={"/post/" <> post.id <> "/"}><%= post.title %></.link>
+          </div>
           <div class="meta">
             <div class="date"><%= post.date %></div>
             <div class="tags">
