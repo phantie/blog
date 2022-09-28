@@ -45,7 +45,9 @@ defmodule BlogWeb.PageView do
     assigns =
       if assigns[:file] do
         nil = assigns[:code]
-        {:ok, code} = File.read(assigns[:file])
+        # TODO refactor, not hardcoding path
+        file = "lib/blog_web/templates/page/posts/" <> assigns[:file]
+        {:ok, code} = File.read(file)
 
         assigns
         |> Map.delete(:file)
