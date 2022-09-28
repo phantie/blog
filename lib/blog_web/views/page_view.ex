@@ -100,7 +100,7 @@ defmodule BlogWeb.PageView do
     <section class="img">
       <img src={@url}>
     </section>
-    """ 
+    """
   end
 
   def post_preview(assigns) do
@@ -121,7 +121,12 @@ defmodule BlogWeb.PageView do
       |> Enum.sort_by(fn post -> post.dt end, {:desc, NaiveDateTime})
       |> Enum.map(fn post ->
         Map.take(post.manifest.parsed, [:title, :description, :tags])
-        |> Map.put(:dt, post.dt)
+        |> Map.put(
+          :date,
+          case Timex.format(post.dt, "{Mshort} {D}, {YYYY}") do
+            {:ok, fmt} -> fmt
+          end
+        )
       end)
 
     assigns = Map.put(assigns, :posts, posts)
@@ -129,10 +134,18 @@ defmodule BlogWeb.PageView do
     ~H"""
       <%= for post <- @posts do %>
         <section class="post_preview">
-          <h3><%= post.title %></h3>
-          <p><%= post.description %></p>
-          <p><i><%= Enum.join(post.tags, ", ") %></i></p>
-          <p><i><%= Date.to_string(NaiveDateTime.to_date(post.dt)) %></i></p>
+          <div class="title"><%= post.title %></div>
+          <div class="meta">
+            <div class="date"><%= post.date %></div>
+            <div class="tags">
+              <%= for tag <- post.tags do %>
+                <div class="tag">
+                  <.link href="/"><%= tag %></.link>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="description"><%= post.description %></div>
         </section>
       <% end %>
     """

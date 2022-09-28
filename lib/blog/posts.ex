@@ -102,7 +102,9 @@ defmodule Blog.Posts do
           content: manifest,
           parsed:
             case parse_manifest(manifest) do
-              {:ok, manifest} -> manifest
+              {:ok, manifest} ->
+                manifest
+
               {:error, field} ->
                 raise "manifest has invalid field '#{field}'. path: #{path}"
             end
