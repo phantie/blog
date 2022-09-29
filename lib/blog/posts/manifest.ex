@@ -1,4 +1,3 @@
-
 defmodule Post.Manifest do
   defstruct path: nil,
             content: nil,

@@ -1,11 +1,14 @@
-<h4>
-  Invalid post count:
-  <%= Blog.Posts.invalid_post_count() %>
-</h4>
+<%= if Mix.env() == :dev do %>
+  <h4>
+    Invalid post count:
+    <%= Blog.Posts.invalid_post_count() %>
+  </h4>
+<% end %>
 
-<.post_previews page={@page}/>
+<.post_previews page={@page} posts_per_page={@posts_per_page}/>
 
-
-<%= if Blog.Posts.valid_post_page_exists?(@page + 1, posts_per_page: 1) do %>
-  <div><.link href={"/posts/?page=" <> Integer.to_string(@page + 1) }>Next page</.link></div>
+<%= if Blog.Posts.valid_post_page_exists?(@page + 1, posts_per_page: @posts_per_page) do %>
+  <div>
+    <.link href={"/posts/?page=" <> Integer.to_string(@page + 1) }>Next page</.link>
+  </div>
 <% end %>

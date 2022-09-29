@@ -29,7 +29,8 @@ defmodule BlogWeb.PageController do
     conn
     |> render("posts.html",
       page_title: "Posts",
-      page: desired_page
+      page: desired_page,
+      posts_per_page: 20
     )
   end
 

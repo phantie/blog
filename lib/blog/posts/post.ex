@@ -27,7 +27,7 @@ defmodule Post do
   def load_post(dir_name) do
     path_from_root = Path.join(@posts_path_from_root, dir_name)
 
-    parse_datetime = fn str -> 
+    parse_datetime = fn str ->
       case Timex.parse(str, "{D}_{M}_{YY}") do
         {:ok, dt} ->
           dt
@@ -41,7 +41,8 @@ defmodule Post do
     end
 
     %Post{
-      id: dir_name, # post ID is the date is the directory name
+      # post ID is the date is the directory name
+      id: dir_name,
       dt: parse_datetime.(dir_name),
       path_from_root: path_from_root,
       path_for_render: Path.join([@posts_path_for_render, dir_name, @content_html]),

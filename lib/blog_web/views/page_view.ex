@@ -116,11 +116,13 @@ defmodule BlogWeb.PageView do
   end
 
   def post_previews(assigns) do
-    posts_per_page = 1
-    page = assigns[:page] || 1
-    posts = Blog.Posts.posts_for_display() |> Blog.Posts.take_page(page, posts_per_page)
-
-    assigns = Map.put(assigns, :posts, posts)
+    assigns =
+      Map.put(
+        assigns,
+        :posts,
+        Blog.Posts.posts_for_display()
+        |> Blog.Posts.take_page(assigns.page, assigns.posts_per_page)
+      )
 
     ~H"""
       <%= for post <- @posts do %>
