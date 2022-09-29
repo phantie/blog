@@ -34,7 +34,7 @@ defmodule BlogWeb.PageController do
   end
 
   def post(conn, %{"id" => id}) do
-    case Blog.Posts.post_by_id(id) do
+    case Blog.Posts.valid_post_by_id(id) do
       nil -> conn |> send_resp(404, "")
       post -> render(conn, post.path_for_render, page_title: "Post")
     end
