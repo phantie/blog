@@ -80,19 +80,52 @@ defmodule Blog.Posts do
 
   def start_link([]) do
     IO.puts("post agent has started")
-    Agent.start_link(fn -> load_posts() end, name: __MODULE__)
+    Agent.start_link(&load_state/0, name: __MODULE__)
   end
 
-  def parse_manifest(manifest) do
+  defp load_state do
+    all_posts = load_all_posts()
+    valid_posts = all_posts |> valid_posts()
+    invalid_posts = all_posts |> invalid_posts()
+
+    %{
+      all: all_posts,
+      valid: valid_posts,
+      invalid: invalid_posts,
+      id_to_valid: valid_posts |> Enum.map(fn m -> {m.id, m} end) |> Enum.into(%{}),
+      valid_count: Enum.count(valid_posts),
+      invalid_count: Enum.count(invalid_posts)
+    }
+  end
+
+  def value(key)
+      when key in [:all, :valid, :invalid, :id_to_valid, :valid_count, :invalid_count] do
+    value()[key]
+  end
+
+  def value do
+    if Mix.env() == :prod do
+      Agent.get(__MODULE__, &Function.identity/1)
+    else
+      load_state()
+    end
+  end
+
+  def valid_posts, do: value(:valid)
+  def invalid_posts, do: value(:invalid)
+  def valid_post_count, do: value(:valid_count)
+  def invalid_post_count, do: value(:invalid_count)
+  def id_to_valid_post, do: value(:id_to_valid)
+
+  def valid_post_by_id(id), do: id_to_valid_post()[id]
+
+  defp parse_manifest(manifest) do
     manifest = YamlElixir.read_from_string!(manifest)
-    title = Map.get(manifest, "title")
-    description = Map.get(manifest, "description")
-    tags = Map.get(manifest, "tags")
 
     Post.Manifest.Parsed.new(
-      title: title,
-      tags: tags,
-      description: description
+      title: manifest["title"],
+      tags: manifest["tags"],
+      description: manifest["description"]
     )
   end
 
@@ -117,12 +150,11 @@ defmodule Blog.Posts do
       {:error, :enoent} ->
         %Post.Manifest{
           path: path
-          # error: :enoent
         }
     end
   end
 
-  def load_posts do
+  def load_all_posts do
     {:ok, posts} = File.ls(@posts_path_from_root)
 
     IO.puts("Potential posts: " <> inspect(posts))
@@ -130,51 +162,22 @@ defmodule Blog.Posts do
     posts
     |> Enum.map(fn fld_name ->
       path_from_root = Path.join(@posts_path_from_root, fld_name)
-      path_for_render = Path.join([@posts_path_for_render, fld_name, @content_html])
-      content_file_path = Path.join(path_from_root, @content_file)
-      has_content = File.exists?(content_file_path)
 
       %Post{
         id: fld_name,
         dt: Post.parse_datetime(fld_name),
         path_from_root: path_from_root,
-        path_for_render: path_for_render,
-        has_content: has_content,
+        path_for_render: Path.join([@posts_path_for_render, fld_name, @content_html]),
+        has_content: File.exists?(Path.join(path_from_root, @content_file)),
         manifest: load_manifest(path_from_root)
       }
     end)
   end
 
-  def ready_post?(%{manifest: nil}) do
-    false
-  end
-
-  def ready_post?(%{manifest: %{parsed: nil}}) do
-    false
-  end
-
-  def ready_post?(%{has_content: false}) do
-    false
-  end
-
-  def ready_post?(%{manifest: %{parsed: _}, has_content: true}) do
-    true
-  end
-
-  def value do
-    if Mix.env() == :prod do
-      Agent.get(__MODULE__, &Function.identity/1)
-    else
-      load_posts()
-    end
-  end
-
-  # TODO optimize using mapping on necessity
-  def post_by_id(id) do
-    value()
-    |> valid_posts()
-    |> Enum.find(nil, fn post -> post.id == id end)
-  end
+  def ready_post?(%{manifest: nil}), do: false
+  def ready_post?(%{manifest: %{parsed: nil}}), do: false
+  def ready_post?(%{has_content: false}), do: false
+  def ready_post?(%{manifest: %{parsed: _}, has_content: true}), do: true
 
   # TODO find a way to reload state of this agent when
   # posts are updated to immediately see update in /posts/ in dev env.
@@ -194,8 +197,7 @@ defmodule Blog.Posts do
   end
 
   def page_exists?(page) do
-    valid_posts = Blog.Posts.value() |> Blog.Posts.valid_posts()
     posts_per_page = 1
-    Enum.count(valid_posts) >= page * posts_per_page
+    valid_post_count() >= page * posts_per_page
   end
 end

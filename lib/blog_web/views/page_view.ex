@@ -116,17 +116,17 @@ defmodule BlogWeb.PageView do
   end
 
   def post_previews(assigns) do
-    valid_posts = Blog.Posts.value() |> Blog.Posts.valid_posts()
+    valid_posts = Blog.Posts.valid_posts()
 
     posts_per_page = 1
 
     page = assigns[:page] || 1
 
-    posts = (
-      valid_posts
-      |> Enum.sort_by(fn post -> post.dt end, {:desc, NaiveDateTime})
-      |> Stream.chunk_every(posts_per_page)
-      |> Enum.at(page - 1) || [])
+    posts =
+      (valid_posts
+       |> Enum.sort_by(fn post -> post.dt end, {:desc, NaiveDateTime})
+       |> Stream.chunk_every(posts_per_page)
+       |> Enum.at(page - 1) || [])
       |> Enum.map(fn post ->
         Map.take(post.manifest.parsed, [:title, :description, :tags])
         |> Map.put(

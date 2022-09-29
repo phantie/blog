@@ -1,6 +1,6 @@
 <h4>
   Invalid post count:
-  <%= Enum.count(Blog.Posts.invalid_posts(Blog.Posts.load_posts())) %>
+  <%= Blog.Posts.invalid_post_count() %>
 </h4>
 
 <.post_previews page={@page}/>
