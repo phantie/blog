@@ -192,4 +192,10 @@ defmodule Blog.Posts do
     posts
     |> Enum.filter(fn post -> !ready_post?(post) end)
   end
+
+  def page_exists?(page) do
+    valid_posts = Blog.Posts.value() |> Blog.Posts.valid_posts()
+    posts_per_page = 1
+    Enum.count(valid_posts) >= page * posts_per_page
+  end
 end

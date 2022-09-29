@@ -5,4 +5,7 @@
 
 <.post_previews page={@page}/>
 
-<div><.link href={"/posts/?page=" <> Integer.to_string(@page + 1) }>Next page</.link></div>
+
+<%= if Blog.Posts.page_exists?(@page + 1) do %>
+  <div><.link href={"/posts/?page=" <> Integer.to_string(@page + 1) }>Next page</.link></div>
+<% end %>
