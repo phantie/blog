@@ -5,10 +5,10 @@
   </h4>
 <% end %>
 
-<.post_previews page={@page} posts_per_page={@posts_per_page}/>
+<.post_previews posts={@posts}/>
 
-<%= if Blog.Posts.valid_post_page_exists?(@page + 1, posts_per_page: @posts_per_page) do %>
+<%= if @next_page_exists do %>
   <div>
-    <.link href={"/posts/?page=" <> Integer.to_string(@page + 1) }>Next page</.link>
+    <.link href={"/posts/?page=#{@page + 1}&tag=#{@tag}" }>Next page</.link>
   </div>
 <% end %>

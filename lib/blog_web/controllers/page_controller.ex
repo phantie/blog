@@ -12,7 +12,7 @@ defmodule BlogWeb.PageController do
   end
 
   def posts(conn, params) do
-    desired_page =
+    page =
       case params["page"] do
         nil ->
           1
@@ -24,11 +24,27 @@ defmodule BlogWeb.PageController do
           end
       end
 
+    posts = case params["tag"] do
+      nil -> Blog.Posts.posts_for_display()
+      "" -> Blog.Posts.posts_for_display() # TODO
+      tag -> Blog.Posts.tag_to_valid_posts_for_display()[tag] || []
+    end
+
+    posts_per_page = 1
+    
+    posts_page = posts |> Blog.Posts.take_page(page, posts_per_page)
+
+    next_page_exists = Blog.Posts.post_page_exists?(posts, page + 1, posts_per_page: posts_per_page)
+
     conn
-    |> render("posts.html",
+    |> render(
+      "posts.html",
       page_title: "Posts",
-      page: desired_page,
-      posts_per_page: 20
+      posts: posts_page,
+      page: page,
+      posts_per_page: posts_per_page,
+      tag: params["tag"],
+      next_page_exists: next_page_exists
     )
   end
 

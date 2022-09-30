@@ -116,14 +116,6 @@ defmodule BlogWeb.PageView do
   end
 
   def post_previews(assigns) do
-    assigns =
-      Map.put(
-        assigns,
-        :posts,
-        Blog.Posts.posts_for_display()
-        |> Blog.Posts.take_page(assigns.page, assigns.posts_per_page)
-      )
-
     ~H"""
       <%= for post <- @posts do %>
         <section class="post_preview">
@@ -135,7 +127,7 @@ defmodule BlogWeb.PageView do
             <div class="tags">
               <%= for tag <- post.tags do %>
                 <div class="tag">
-                  <.link href="/"><%= tag %></.link>
+                  <.link href={"/posts/?tag=#{tag}" }><%= tag %></.link>
                 </div>
               <% end %>
             </div>
