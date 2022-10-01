@@ -68,7 +68,9 @@ defmodule Post.Manifest.Parsed do
 
       !(is_list(tags) &&
           Enum.count(tags) >= 1 &&
-            Enum.all?(tags, fn tag -> is_binary(tag) end)) ->
+            Enum.all?(tags, fn tag ->
+              is_binary(tag) && !String.contains?(tag, " ") end)
+            ) ->
         invalid_field.(:tags)
 
       true ->

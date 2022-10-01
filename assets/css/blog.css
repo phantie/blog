@@ -135,7 +135,7 @@ section a.link:hover {
 section.content section.post_preview {
   --font-size-base: 23px;
   font-size: var(--font-size-base);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   background-color: rgb(17, 17, 17);
   padding: 40px 50px;
   margin-bottom: 30px;
@@ -172,6 +172,15 @@ section.post_preview .description{
   margin-top: 40px;
   margin-bottom: 10px;
   overflow-wrap: break-word;
+}
+
+.filter_by_tag {
+  font-size: calc(var(--font-size-base) - 5px);
+  background-color: rgb(17, 17, 17);;
+  padding: 20px 40px;
+  margin: 20px 0;
+  width: max-content;
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 
