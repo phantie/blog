@@ -71,13 +71,6 @@ defmodule BlogWeb.PageView do
     """
   end
 
-  defp add_query(url, query_params) do
-    (url <> "?") <>
-      (query_params
-       |> Enum.map(fn {k, v} -> "#{k}=#{v}" end)
-       |> Enum.join("&"))
-  end
-
   def yt(assigns) do
     assigns =
       assigns

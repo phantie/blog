@@ -28,12 +28,12 @@ defmodule Post do
     path_from_root = Path.join(@posts_path_from_root, dir_name)
 
     parse_datetime = fn str ->
-      case Timex.parse(str, "{D}_{M}_{YY}") do
+      case Timex.parse(str, "{D}-{M}-{YY}") do
         {:ok, dt} ->
           dt
 
         {:error, _} ->
-          case Timex.parse(str, "{D}_{M}_{YY} {h24}:{m}") do
+          case Timex.parse(str, "{D}-{M}-{YY} {h24}:{m}") do
             {:ok, dt} -> dt
             {:error, _} -> raise "invalid post time: " <> str
           end
