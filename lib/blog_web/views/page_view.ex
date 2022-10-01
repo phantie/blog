@@ -84,9 +84,9 @@ defmodule BlogWeb.PageView do
       |> Map.delete(:id)
       |> Map.put(:url, "https://youtube.com/embed/#{assigns.id}")
 
-    query = [modestbranding: 1]
+    query = %{"modestbranding" => 1}
 
-    assigns = assigns |> Map.put(:url, add_query(assigns.url, query))
+    assigns = assigns |> Map.put(:url, join_query(assigns.url, URI.encode_query(query)))
 
     ~H"""
     <section class="yt_video">
@@ -115,6 +115,14 @@ defmodule BlogWeb.PageView do
     """
   end
 
+  def join_query(url, "") do
+    url
+  end
+
+  def join_query(url, query) do
+    url <> "?" <> query
+  end
+
   def post_next_page_query(%{page: page, tag: tag} = query_params) do
     q = %{}
 
@@ -128,10 +136,7 @@ defmodule BlogWeb.PageView do
       tag -> Map.put(q, "tag", tag)
     end
 
-    case q do
-      q when q == %{} -> "/posts/"
-      q -> "/posts/?" <> URI.encode_query(q)
-    end
+    join_query("/posts/", URI.encode_query(q))
   end
 
   def post_previews(assigns) do
