@@ -66,7 +66,22 @@ defmodule BlogWeb.PageView do
   def title(assigns) do
     ~H"""
     <section class="title">
-      <%= @title %>
+      <%= render_slot(@inner_block) %>
+    </section>
+    """
+  end
+
+  def section_title(assigns) do
+    params = case assigns[:id] do
+      nil -> %{}
+      id -> %{"id" => id}
+    end
+
+    assigns = Map.put(assigns, :params, params)
+
+    ~H"""
+    <section class="section_title" {@params}>
+      <%= render_slot(@inner_block) %>
     </section>
     """
   end
