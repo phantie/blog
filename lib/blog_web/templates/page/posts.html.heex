@@ -1,14 +1,18 @@
-<%= if Mix.env() == :dev do %>
+<%= if Mix.env() == :prod do %>
   <h4>
     Invalid post count:
     <%= Blog.Posts.invalid_post_count() %>
   </h4>
 <% end %>
 
+<%= if @tag do %>
+  <div class = "filter_by_tag">tag: <%= @tag %></div>
+<% end %>
+
 <.post_previews posts={@posts}/>
 
 <%= if @next_page_exists do %>
   <div>
-    <.link href={"/posts/?page=#{@page + 1}&tag=#{@tag}" }>Next page</.link>
+    <.link href={post_next_page_query(%{page: @page, tag: @tag})}>Next page</.link>
   </div>
 <% end %>

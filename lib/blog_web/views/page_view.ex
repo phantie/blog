@@ -115,6 +115,25 @@ defmodule BlogWeb.PageView do
     """
   end
 
+  def post_next_page_query(%{page: page, tag: tag} = query_params) do
+    q = %{}
+
+    q = case page do
+      0 -> q
+      page -> Map.put(q, "page", page + 1)
+    end
+
+    q = case tag do
+      nil -> q
+      tag -> Map.put(q, "tag", tag)
+    end
+
+    case q do
+      q when q == %{} -> "/posts/"
+      q -> "/posts/?" <> URI.encode_query(q)
+    end
+  end
+
   def post_previews(assigns) do
     ~H"""
       <%= for post <- @posts do %>
@@ -127,7 +146,7 @@ defmodule BlogWeb.PageView do
             <div class="tags">
               <%= for tag <- post.tags do %>
                 <div class="tag">
-                  <.link href={"/posts/?tag=#{tag}" }><%= tag %></.link>
+                  <.link href={post_next_page_query(%{page: 0, tag: tag})}><%= tag %></.link>
                 </div>
               <% end %>
             </div>
