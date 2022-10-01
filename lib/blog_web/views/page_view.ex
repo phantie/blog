@@ -95,7 +95,7 @@ defmodule BlogWeb.PageView do
 
     query = %{"modestbranding" => 1}
 
-    assigns = assigns |> Map.put(:url, join_query(assigns.url, URI.encode_query(query)))
+    assigns = assigns |> Map.put(:url, join_query(assigns.url, query))
 
     ~H"""
     <section class="yt_video">
@@ -124,13 +124,8 @@ defmodule BlogWeb.PageView do
     """
   end
 
-  def join_query(url, "") do
-    url
-  end
-
-  def join_query(url, query) do
-    url <> "?" <> query
-  end
+  def join_query(url, query) when query == %{}, do: url
+  def join_query(url, %{} = query), do: url <> "?" <> URI.encode_query(query)
 
   def post_next_page_query(%{page: page, tag: tag}) do
     q = %{}
@@ -147,7 +142,7 @@ defmodule BlogWeb.PageView do
         tag -> Map.put(q, "tag", tag)
       end
 
-    join_query("/posts/", URI.encode_query(q))
+    join_query("/posts/", q)
   end
 
   def post_previews(assigns) do
@@ -162,7 +157,8 @@ defmodule BlogWeb.PageView do
             <div class="tags">
               <%= for tag <- post.tags do %>
                 <div class="tag">
-                  <.link href={post_next_page_query(%{page: 0, tag: tag})}><%= tag %></.link>
+                  <.link href={post_next_page_query(%{page: 0, tag: tag})}>
+                    <%= tag %></.link>
                 </div>
               <% end %>
             </div>
