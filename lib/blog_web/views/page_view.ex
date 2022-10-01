@@ -72,10 +72,11 @@ defmodule BlogWeb.PageView do
   end
 
   def section_title(assigns) do
-    params = case assigns[:id] do
-      nil -> %{}
-      id -> %{"id" => id}
-    end
+    params =
+      case assigns[:id] do
+        nil -> %{}
+        id -> %{"id" => id}
+      end
 
     assigns = Map.put(assigns, :params, params)
 
@@ -131,18 +132,20 @@ defmodule BlogWeb.PageView do
     url <> "?" <> query
   end
 
-  def post_next_page_query(%{page: page, tag: tag} = query_params) do
+  def post_next_page_query(%{page: page, tag: tag}) do
     q = %{}
 
-    q = case page do
-      0 -> q
-      page -> Map.put(q, "page", page + 1)
-    end
+    q =
+      case page do
+        0 -> q
+        page -> Map.put(q, "page", page + 1)
+      end
 
-    q = case tag do
-      nil -> q
-      tag -> Map.put(q, "tag", tag)
-    end
+    q =
+      case tag do
+        nil -> q
+        tag -> Map.put(q, "tag", tag)
+      end
 
     join_query("/posts/", URI.encode_query(q))
   end

@@ -11,18 +11,20 @@ defmodule BlogWeb.PageController do
     |> render("posts/26_9_22/post.html", page_title: "Post")
   end
 
-  def post_next_page_query(%{page: page, tag: tag} = query_params) do
+  def post_next_page_query(%{page: page, tag: tag}) do
     q = %{}
 
-    q = case page do
-      0 -> q
-      page -> Map.put(q, "page", page + 1)
-    end
+    q =
+      case page do
+        0 -> q
+        page -> Map.put(q, "page", page + 1)
+      end
 
-    q = case tag do
-      nil -> q
-      tag -> Map.put(q, "tag", tag)
-    end
+    q =
+      case tag do
+        nil -> q
+        tag -> Map.put(q, "tag", tag)
+      end
 
     case q do
       q when q == %{} -> "/posts/"
@@ -43,16 +45,18 @@ defmodule BlogWeb.PageController do
           end
       end
 
-    posts = case params["tag"] do
-      nil -> Blog.Posts.posts_for_display()
-      tag -> Blog.Posts.tag_to_valid_posts_for_display()[tag] || []
-    end
+    posts =
+      case params["tag"] do
+        nil -> Blog.Posts.posts_for_display()
+        tag -> Blog.Posts.tag_to_valid_posts_for_display()[tag] || []
+      end
 
     posts_per_page = 1
 
     posts_page = posts |> Blog.Posts.take_page(page, posts_per_page)
 
-    next_page_exists = Blog.Posts.post_page_exists?(posts, page + 1, posts_per_page: posts_per_page)
+    next_page_exists =
+      Blog.Posts.post_page_exists?(posts, page + 1, posts_per_page: posts_per_page)
 
     conn
     |> render(

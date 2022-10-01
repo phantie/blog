@@ -25,7 +25,9 @@ defmodule Blog.Posts do
     valid_posts = all_posts |> valid_posts()
     invalid_posts = all_posts |> invalid_posts()
     tag_to_valid_posts = tag_to_posts(valid_posts)
-    tag_to_valid_posts_for_display = tag_to_valid_posts
+
+    tag_to_valid_posts_for_display =
+      tag_to_valid_posts
       |> Map.to_list()
       |> Enum.map(fn {tag, posts} -> {tag, posts_for_display(posts)} end)
       |> Enum.into(%{})
@@ -34,7 +36,8 @@ defmodule Blog.Posts do
       all: all_posts,
       valid: valid_posts,
       invalid: invalid_posts,
-      id_to_valid: valid_posts |> Enum.map(fn m -> {m.id, m} end) |> Enum.into(%{}),
+      id_to_valid:
+        valid_posts |> Enum.map(fn p -> {p.manifest.parsed.id, p} end) |> Enum.into(%{}),
       valid_count: Enum.count(valid_posts),
       invalid_count: Enum.count(invalid_posts),
       for_display: posts_for_display(valid_posts),
@@ -120,7 +123,7 @@ defmodule Blog.Posts do
           {:ok, fmt} -> fmt
         end
       )
-      |> Map.put(:id, post.id)
+      |> Map.put(:id, post.manifest.parsed.id)
     end)
   end
 end
