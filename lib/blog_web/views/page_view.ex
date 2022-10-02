@@ -14,10 +14,11 @@ defmodule BlogWeb.PageView do
   def link(assigns) do
     params = %{"href" => assigns.href}
 
-    params = case assigns[:title] do
-      nil -> params
-      title -> Map.put(params, "title", title)
-    end
+    params =
+      case assigns[:title] do
+        nil -> params
+        title -> Map.put(params, "title", title)
+      end
 
     assigns = Map.put(assigns, :params, params)
 
@@ -40,35 +41,43 @@ defmodule BlogWeb.PageView do
     """
   end
 
-  def code(assigns) do
+  defp set_code_lang(assigns) do
+    Map.put(assigns,
+      :lang,
+      case assigns[:lang] do
+        # autodetect
+        nil -> ""
+        lang -> "language-#{lang}"
+      end
+    )
+  end
+
+  def code_file(assigns) do
+    assigns = set_code_lang(assigns)
+
+    code_path = assigns.code_path
+    file = Path.join(code_path, assigns.file)
+    {:ok, code} = File.read(file)
+
     assigns =
       assigns
-      |> Map.put(
-        :lang,
-        case assigns[:lang] do
-          # autodetect
-          nil -> ""
-          lang -> "language-#{lang}"
-        end
-      )
-
-    assigns =
-      if assigns[:file] do
-        nil = assigns[:code]
-        # TODO refactor, not hardcoding path
-        file = "lib/blog_web/templates/page/posts/" <> assigns[:file]
-        {:ok, code} = File.read(file)
-
-        assigns
-        |> Map.delete(:file)
-        |> Map.put(:code, code)
-      else
-        assigns
-      end
+      |> Map.delete(:file)
+      |> Map.put(:code, code)
 
     ~H"""
     <section class="code">
       <pre><code class={@lang}><%= @code %></code></pre>
+    </section>
+    """
+  end
+
+  # TODO find a way to remove the first line if empty
+  def code(assigns) do
+    assigns = set_code_lang(assigns)
+
+    ~H"""
+    <section class="code">
+      <pre><code class={@lang}><%= render_slot(@inner_block) %></code></pre>
     </section>
     """
   end

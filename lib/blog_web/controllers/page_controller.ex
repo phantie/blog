@@ -6,11 +6,6 @@ defmodule BlogWeb.PageController do
     |> render("index.html")
   end
 
-  def first_post(conn, _params) do
-    conn
-    |> render("posts/26_9_22/post.html", page_title: "Post")
-  end
-
   def posts(conn, params) do
     page =
       case params["page"] do
@@ -51,8 +46,19 @@ defmodule BlogWeb.PageController do
 
   def post(conn, %{"id" => id}) do
     case Blog.Posts.valid_post_by_id(id) do
-      nil -> conn |> send_resp(404, "")
-      post -> render(conn, post.path_for_render, page_title: "Post")
+      nil ->
+        conn |> send_resp(404, "")
+
+      post ->
+        IO.puts(inspect(post, pretty: true))
+
+        render(
+          conn,
+          post.path_for_render,
+          page_title: "Post",
+          title: Post.title(post),
+          code_path: Post.code_path(post)
+        )
     end
   end
 end
