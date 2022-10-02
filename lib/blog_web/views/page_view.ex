@@ -12,8 +12,18 @@ defmodule BlogWeb.PageView do
   end
 
   def link(assigns) do
+    params = %{"href" => assigns.href}
+
+    params = case assigns[:title] do
+      nil -> params
+      title -> Map.put(params, "title", title)
+    end
+
+    assigns = Map.put(assigns, :params, params)
+
     ~H"""
-      <a class="link" href={@href}><%= render_slot(@inner_block) %></a><div class="href_sign">ᴴ</div>
+      <a class="link" {@params}><%= render_slot(@inner_block) %></a><div
+        class="href_sign">ᴴ</div>
     """
   end
 
@@ -157,8 +167,9 @@ defmodule BlogWeb.PageView do
             <div class="tags">
               <%= for tag <- post.tags do %>
                 <div class="tag">
-                  <.link href={post_next_page_query(%{page: 0, tag: tag})}>
-                    <%= tag %></.link>
+                    <.link
+                    href={post_next_page_query(%{page: 0, tag: tag})}
+                    title="Filter posts by tag"><%= tag %></.link>
                 </div>
               <% end %>
             </div>

@@ -1,6 +1,5 @@
 defmodule Post do
   defstruct [
-    :id,
     :path_from_root,
     :path_for_render,
     :dt,
@@ -41,8 +40,6 @@ defmodule Post do
     end
 
     %Post{
-      # post ID is the date is the directory name
-      id: dir_name,
       dt: parse_datetime.(dir_name),
       path_from_root: path_from_root,
       path_for_render: Path.join([@posts_path_for_render, dir_name, @content_html]),

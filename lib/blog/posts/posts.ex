@@ -119,7 +119,7 @@ defmodule Blog.Posts do
       |> Map.take([:title, :description, :tags])
       |> Map.put(
         :date,
-        case Timex.format(post.dt, "{Mshort} {D}, {YYYY}") do
+        case Timex.format(post.dt, "{Mfull} {D}, {YYYY}") do
           {:ok, fmt} -> fmt
         end
       )
