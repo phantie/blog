@@ -3,3 +3,6 @@ run:
 
 routes:
 	mix phx.routes
+
+deploy:
+	git push -f gigalixir
