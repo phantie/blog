@@ -9,7 +9,9 @@ defmodule Blog.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Blog.Repo,
+      # Turn off repo
+      # Blog.Repo,
+
       # Start the Telemetry supervisor
       BlogWeb.Telemetry,
       # Start the PubSub system
