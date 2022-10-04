@@ -51,16 +51,20 @@ header.common .title h2 a:hover {
 }
 
 section.ref_text {
+  display: flex;
   padding: 30px 40px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  max-width: max-content;
+  flex-direction: column;
+  align-self: center;
 }
 
-section.ref_text .text {
+section.ref_text .text_block .text {
   overflow-wrap: break-word;
   display: inline;
 }
 
-section.ref_text .quote{
+section.ref_text .text_block .quote_symbol{
   display: inline;
 }
 
