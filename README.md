@@ -1,4 +1,4 @@
-# Blog
+# Source code of [Blog](https://blog-phantie.gigalixirapp.com/)
 
 To start your Phoenix server:
 
