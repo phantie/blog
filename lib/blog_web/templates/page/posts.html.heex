@@ -12,7 +12,7 @@
 <.post_previews posts={@posts}/>
 
 <%= if @next_page_exists do %>
-  <div>
+  <div class="next_page">
     <.link href={post_next_page_query(%{page: @page, tag: @tag})}>Next page</.link>
   </div>
 <% end %>

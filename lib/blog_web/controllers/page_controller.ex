@@ -50,8 +50,6 @@ defmodule BlogWeb.PageController do
         conn |> send_resp(404, "")
 
       post ->
-        IO.puts(inspect(post, pretty: true))
-
         render(
           conn,
           post.path_for_render,

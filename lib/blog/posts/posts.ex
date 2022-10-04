@@ -88,7 +88,7 @@ defmodule Blog.Posts do
   #   end
 
   def post_page_exists?(posts, page, posts_per_page: posts_per_page) do
-    Enum.count(posts) >= page * posts_per_page
+    Enum.count(posts) > (page - 1) * posts_per_page
   end
 
   def take_page(posts, page, posts_per_page) do
