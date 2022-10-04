@@ -9,7 +9,7 @@ defmodule BlogWeb.Endpoint do
     key: "_blog_key",
     signing_salt: "Wkd0lDzU",
     # TODO fix SameSite errors in Chrome
-    same_site: "None"
+    same_site: "Lax"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
