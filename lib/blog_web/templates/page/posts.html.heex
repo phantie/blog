@@ -1,4 +1,4 @@
-<%= if Mix.env() do %>
+<%= if Mix.env() == :dev do %>
   <h4>
     Invalid post count:
     <%= Blog.Posts.invalid_post_count() %>

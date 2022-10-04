@@ -1,16 +1,8 @@
+Source code of [Blog](https://blog-phantie.gigalixirapp.com/)
+
 Install:
 ```
 mix deps.get
-```
-
-Start database:
-```
-...
-```
-
-Create schema:
-```
-mix ecto.create
 ```
 
 Run:

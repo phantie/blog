@@ -2,8 +2,9 @@ defmodule BlogWeb.PageController do
   use BlogWeb, :controller
 
   def index(conn, _params) do
-    conn
-    |> render("index.html")
+    # conn
+    # |> render("index.html")
+    redirect(conn, to: "/posts/")
   end
 
   def posts(conn, params) do
@@ -25,7 +26,7 @@ defmodule BlogWeb.PageController do
         tag -> Blog.Posts.tag_to_valid_posts_for_display()[tag] || []
       end
 
-    posts_per_page = 1
+    posts_per_page = 10
 
     posts_page = posts |> Blog.Posts.take_page(page, posts_per_page)
 
@@ -53,7 +54,7 @@ defmodule BlogWeb.PageController do
         render(
           conn,
           post.path_for_render,
-          page_title: "Post",
+          page_title: Post.title(post),
           title: Post.title(post),
           code_path: Post.code_path(post)
         )

@@ -1,17 +1,11 @@
-id: first-post
+id: test-post
 
-title: Blog post title
+title: Test post title
 
 description: >
-  This is my first post.
-  Have a look.
+  Test post
 
 tags:
-  - books
   - wasd
   - loading
-  - tag1
-  - tag2
-  - tag3
-  - tag4
-  - tag5
+  - test
