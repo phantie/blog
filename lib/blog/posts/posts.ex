@@ -101,6 +101,7 @@ defmodule Blog.Posts do
     posts
     |> Enum.filter(fn post -> Post.ready?(post) end)
   end
+
   defp invalid_posts(posts) do
     posts
     |> Enum.filter(fn post -> !Post.ready?(post) end)

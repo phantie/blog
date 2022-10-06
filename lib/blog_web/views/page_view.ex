@@ -44,7 +44,8 @@ defmodule BlogWeb.PageView do
   end
 
   defp set_code_lang(assigns) do
-    Map.put(assigns,
+    Map.put(
+      assigns,
       :lang,
       case assigns[:lang] do
         # autodetect
@@ -54,11 +55,44 @@ defmodule BlogWeb.PageView do
     )
   end
 
-  def code_file(assigns) do
+  defp set_code_lang(assigns, file_path) do
     assigns = set_code_lang(assigns)
 
-    code_path = assigns.code_path
-    file = Path.join(code_path, assigns.file)
+    ext_to_lang = %{
+      ".py" => "python",
+      ".rs" => "rust",
+      ".js" => "javascript",
+      ".clj" => "clojure"
+    }
+
+    case Path.extname(file_path) do
+      "" ->
+        assigns
+
+      ext ->
+        case Map.has_key?(ext_to_lang, ext) do
+          true ->
+            case assigns.lang do
+              "" ->
+                nil
+
+              lang ->
+                if Mix.env() == :dev do
+                  raise "language detected using extension of file: #{file_path}"
+                end
+            end
+
+            Map.put(assigns, :lang, "language-#{ext_to_lang[ext]}")
+
+          false ->
+            assigns
+        end
+    end
+  end
+
+  def code_file(assigns) do
+    file = Path.join(assigns.code_path, assigns.file)
+    assigns = set_code_lang(assigns, file)
     {:ok, code} = File.read(file)
 
     assigns =
