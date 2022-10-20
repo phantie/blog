@@ -1,8 +1,27 @@
 defmodule BlogWeb.PageControllerTest do
   use BlogWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
-    conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "Welcome to Phoenix!"
+  # generate a test for every "valid" blog post and try to render each
+  for id <- Map.keys(Blog.Posts.id_to_valid_post()) do
+    @url "/post/#{id}/"
+    test "GET #{@url}", %{conn: conn} do
+      assert get(conn, @url).status == 200
+    end
+  end
+
+  defp render_posts_pages(conn, page) do
+    status =
+      get(conn, Routes.page_path(conn, :posts) |> BlogWeb.PageView.join_query(%{page: page})).status
+
+    assert status == 200 || status == 404, "error on page #{page}"
+
+    case status do
+      200 -> render_posts_pages(conn, page + 1)
+      404 -> nil
+    end
+  end
+
+  test "GET post list pages", %{conn: conn} do
+    render_posts_pages(conn, 1)
   end
 end

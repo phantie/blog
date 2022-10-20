@@ -7,6 +7,10 @@ defmodule BlogWeb.PageController do
     redirect(conn, to: "/posts/")
   end
 
+  def posts_per_page do
+    10
+  end
+
   def posts(conn, params) do
     page =
       case params["page"] do
@@ -26,23 +30,27 @@ defmodule BlogWeb.PageController do
         tag -> Blog.Posts.tag_to_valid_posts_for_display()[tag] || []
       end
 
-    posts_per_page = 10
-
-    posts_page = posts |> Blog.Posts.take_page(page, posts_per_page)
+    posts_page = posts |> Blog.Posts.take_page(page, posts_per_page())
 
     next_page_exists =
-      Blog.Posts.post_page_exists?(posts, page + 1, posts_per_page: posts_per_page)
+      Blog.Posts.post_page_exists?(posts, page + 1, posts_per_page: posts_per_page())
 
-    conn
-    |> render(
-      "posts.html",
-      page_title: "Posts",
-      posts: posts_page,
-      page: page,
-      posts_per_page: posts_per_page,
-      tag: params["tag"],
-      next_page_exists: next_page_exists
-    )
+    case Enum.count(posts_page) do
+      0 ->
+        conn |> put_status(:not_found)
+
+      _ ->
+        conn
+        |> render(
+          "posts.html",
+          page_title: "Posts",
+          posts: posts_page,
+          page: page,
+          posts_per_page: posts_per_page(),
+          tag: params["tag"],
+          next_page_exists: next_page_exists
+        )
+    end
   end
 
   def post(conn, %{"id" => id}) do

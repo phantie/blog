@@ -21,7 +21,7 @@ defmodule Post do
 
   def load_all do
     {:ok, posts} = File.ls(@posts_path_from_root)
-    IO.puts("Potential posts: " <> inspect(posts))
+    # IO.puts("Potential posts: " <> inspect(posts))
     posts |> Enum.map(&load_post/1)
   end
 
