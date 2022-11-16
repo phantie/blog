@@ -76,7 +76,7 @@ defmodule BlogWeb.PageView do
               "" ->
                 nil
 
-              lang ->
+              _lang ->
                 if Mix.env() == :dev do
                   raise "language detected using extension of file: #{file_path}"
                 end
