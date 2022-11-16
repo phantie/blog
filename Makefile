@@ -9,3 +9,9 @@ deploy:
 
 deploy_force:
 	git push -f gigalixir
+
+status:
+	gigalixir status
+
+test:
+	mix test
