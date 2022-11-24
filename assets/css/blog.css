@@ -77,6 +77,10 @@ section.text {
   overflow-wrap: break-word;
 }
 
+section .text {
+  line-height: 1.3;
+}
+
 section.content section {
   margin-bottom: 50px;
 }
