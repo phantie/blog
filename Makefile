@@ -7,11 +7,11 @@ routes:
 deploy:
 	git push gigalixir
 
-deploy_force:
+deploy-force:
 	git push -f gigalixir
 
 status:
 	gigalixir status
 
-test:
+test-local:
 	mix test
