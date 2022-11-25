@@ -160,11 +160,19 @@ defmodule BlogWeb.PageView do
     """
   end
 
-  # TODO add support for local images stored closely to post files
   def img(assigns) do
     ~H"""
     <section class="img">
       <img src={@url}>
+    </section>
+    """
+  end
+
+  # TODO improve experience
+  def img_local(assigns) do
+    ~H"""
+    <section class="img">
+      <img src={ Routes.static_path(@conn, @url) }>
     </section>
     """
   end
