@@ -13,11 +13,10 @@ defmodule BlogWeb.PageControllerTest do
     status =
       get(conn, Routes.page_path(conn, :posts) |> BlogWeb.PageView.join_query(%{page: page})).status
 
-    assert status == 200 || status == 404, "error on page #{page}"
-
     case status do
       200 -> render_posts_pages(conn, page + 1)
       404 -> nil
+      _ -> raise "error on page #{page}"
     end
   end
 
