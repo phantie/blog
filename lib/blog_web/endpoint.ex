@@ -13,7 +13,8 @@ defmodule BlogWeb.Endpoint do
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
-
+  # Serve static
+  #
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest
@@ -22,7 +23,15 @@ defmodule BlogWeb.Endpoint do
     at: "/",
     from: :blog,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: ~w(
+      assets
+      fonts
+      images
+      favicon.ico
+      robots.txt
+      pdf
+      posts
+    )
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
