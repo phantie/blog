@@ -22,7 +22,8 @@ defmodule Blog.Test.Links do
   defp set(value), do: Agent.update(__MODULE__, fn _ -> value end)
   def value, do: Agent.get(__MODULE__, &Function.identity/1)
   def urls, do: Map.get(value(), :urls)
-  def local_urls, do: Enum.filter(urls(), &is_local?/1)
+  def local, do: Enum.filter(urls(), fn url -> is_local?(url) end)
+  def external, do: Enum.filter(urls(), fn url -> !is_local?(url) end)
 
   def add(url) do
     if !MapSet.member?(urls(), url) do

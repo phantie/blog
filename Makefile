@@ -10,11 +10,17 @@ deploy:
 fmt:
 	mix format
 
+ftm:
+	mix format
+
 deploy-force:
 	git push -f gigalixir
 
 status:
 	gigalixir status
 
-test-local:
+test-offline:
 	mix test
+
+test-online:
+	mix test --include online
