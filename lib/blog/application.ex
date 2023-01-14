@@ -23,6 +23,19 @@ defmodule Blog.Application do
       # {Blog.Worker, arg}
     ]
 
+    children =
+      case Mix.env() do
+        :test ->
+          children ++
+            [
+              # Init resource list for testing
+              Blog.Test.Links
+            ]
+
+        _ ->
+          children
+      end
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Blog.Supervisor]

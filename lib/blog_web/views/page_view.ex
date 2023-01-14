@@ -12,6 +12,10 @@ defmodule BlogWeb.PageView do
   end
 
   def link(assigns) do
+    if Mix.env() == :test do
+      Blog.Test.Links.add(assigns.href)
+    end
+
     params = %{"href" => assigns.href}
 
     params =
@@ -143,10 +147,16 @@ defmodule BlogWeb.PageView do
   end
 
   def yt(assigns) do
+    url = "https://youtube.com/embed/#{assigns.id}"
+
+    if Mix.env() == :test do
+      Blog.Test.Links.add(url)
+    end
+
     assigns =
       assigns
       |> Map.delete(:id)
-      |> Map.put(:url, "https://youtube.com/embed/#{assigns.id}")
+      |> Map.put(:url, url)
 
     query = %{"modestbranding" => 1}
 
@@ -161,6 +171,10 @@ defmodule BlogWeb.PageView do
   end
 
   def img(assigns) do
+    if Mix.env() == :test do
+      Blog.Test.Links.add(assigns.url)
+    end
+
     ~H"""
     <section class="img">
       <img src={@url}>
@@ -170,6 +184,10 @@ defmodule BlogWeb.PageView do
 
   # TODO improve experience
   def img_local(assigns) do
+    if Mix.env() == :test do
+      Blog.Test.Links.add(assigns.url)
+    end
+
     ~H"""
     <section class="img">
       <img src={ Routes.static_path(@conn, @url) }>

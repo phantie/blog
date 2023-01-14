@@ -62,7 +62,7 @@ defmodule Blog.Posts do
   end
 
   defp value do
-    if Mix.env() == :prod do
+    if Mix.env() in [:prod, :test] do
       Agent.get(__MODULE__, &Function.identity/1)
     else
       load_state()
