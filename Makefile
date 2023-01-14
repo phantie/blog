@@ -7,6 +7,9 @@ routes:
 deploy:
 	git push gigalixir
 
+fmt:
+	mix format
+
 deploy-force:
 	git push -f gigalixir
 
