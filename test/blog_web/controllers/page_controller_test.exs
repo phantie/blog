@@ -16,16 +16,27 @@ defmodule BlogWeb.PageControllerTest do
 
   test "ping local links", %{conn: conn} do
     Blog.Test.Links.clear()
-
     render_every_post(conn)
-
-    links = Blog.Test.Links.local_urls()
+    links = Blog.Test.Links.local()
 
     broken_links =
       links
       |> Enum.map(fn url -> {url, head(conn, url).status} end)
       |> Enum.filter(fn {_url, status} -> status != 200 end)
 
+    IO.puts("tested links: #{Enum.count(links)}")
+
+    assert Enum.empty?(broken_links), "broken links: \n#{inspect(broken_links, pretty: true)}"
+  end
+
+  @tag :online
+  test "ping external links", %{conn: conn} do
+    Blog.Test.Links.clear()
+    render_every_post(conn)
+    links = Blog.Test.Links.external()
+
+    # TODO modify ping for external calls
+    broken_links = links
     IO.puts("tested links: #{Enum.count(links)}")
 
     assert Enum.empty?(broken_links), "broken links: \n#{inspect(broken_links, pretty: true)}"
