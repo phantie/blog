@@ -51,7 +51,8 @@ defmodule Blog.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:yaml_elixir, "~> 2.9.0"},
       {:timex, "~> 3.0"},
-      {:typed_struct, "~> 0.1.4"}
+      {:typed_struct, "~> 0.1.4"},
+      {:httpoison, "~> 1.8"}
     ]
   end
 
