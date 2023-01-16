@@ -24,7 +24,7 @@ defmodule BlogWeb.PageControllerTest do
       |> Enum.map(fn url -> {url, head(conn, url).status} end)
       |> Enum.filter(fn {_url, status} -> status != 200 end)
 
-    IO.puts("tested links: #{Enum.count(links)}")
+    IO.puts("tested local links: #{Enum.count(links)}")
 
     assert Enum.empty?(broken_links), "broken links: \n#{inspect(broken_links, pretty: true)}"
   end
@@ -35,9 +35,14 @@ defmodule BlogWeb.PageControllerTest do
     render_every_post(conn)
     links = Blog.Test.Links.external()
 
-    # TODO modify ping for external calls
-    broken_links = links
-    IO.puts("tested links: #{Enum.count(links)}")
+    # TODO fix requests for urls with query params, make 400 invalid code to receive
+
+    broken_links =
+      links
+      |> Enum.map(fn url -> {url, elem(HTTPoison.head(url, [], follow_redirect: true), 1).status_code} end)
+      |> Enum.filter(fn {_url, status} -> status not in [200, 400] end)
+
+    IO.puts("tested external links: #{Enum.count(links)}")
 
     assert Enum.empty?(broken_links), "broken links: \n#{inspect(broken_links, pretty: true)}"
   end
