@@ -144,6 +144,11 @@ section a.link:hover {
 
 .href_sign {
   display: inline;
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
 }
 
 section.content section.post_preview {
